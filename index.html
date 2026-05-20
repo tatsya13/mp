@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ГТО для всех: проектный рывок</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Nunito',sans-serif;background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);min-height:100vh;overflow-x:hidden;color:#fff}
+.gc{width:100vw;min-height:100vh;position:relative;display:flex;flex-direction:column;align-items:center;padding:20px}
+.stars{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0}
+.star{position:absolute;background:#fff;border-radius:50%;animation:tw var(--d) ease-in-out infinite}
+@keyframes tw{0%,100%{opacity:.15}50%{opacity:1}}
+.scene{display:none;flex-direction:column;align-items:center;justify-content:center;width:100%;max-width:1100px;padding:20px;position:relative;z-index:1}
+.scene.active{display:flex;animation:fu .6s ease forwards}
+@keyframes fu{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+.title{font-size:clamp(1.8rem,5vw,3rem);font-weight:900;text-align:center;background:linear-gradient(135deg,#f093fb,#f5576c,#4facfe,#00f2fe);background-size:300% 300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:gs 4s ease infinite}
+@keyframes gs{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+.sub{font-size:clamp(.9rem,2vw,1.15rem);color:rgba(255,255,255,.6);text-align:center;margin:6px 0 18px}
+.story{font-size:clamp(.9rem,2vw,1.1rem);color:rgba(255,255,255,.85);text-align:center;max-width:700px;line-height:1.7;margin-bottom:24px}
+.btn{padding:15px 40px;border:none;border-radius:50px;font-size:1.05rem;font-weight:700;font-family:'Nunito',sans-serif;cursor:pointer;transition:all .3s;text-transform:uppercase;letter-spacing:1px}
+.btn-p{background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;box-shadow:0 8px 30px rgba(102,126,234,.4)}
+.btn-p:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(102,126,234,.6)}
+.btn-n{background:linear-gradient(135deg,#11998e,#38ef7d);color:#fff;box-shadow:0 8px 30px rgba(56,239,125,.3);margin-top:14px}
+.btn-n:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(56,239,125,.5)}
+.team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:18px;width:100%;max-width:950px;margin-bottom:24px}
+.tcard{background:rgba(255,255,255,.07);backdrop-filter:blur(20px);border-radius:24px;padding:22px 14px;text-align:center;border:1px solid rgba(255,255,255,.1);transition:transform .3s,box-shadow .3s;animation:cf .6s ease backwards}
+.tcard:nth-child(1){animation-delay:.1s}.tcard:nth-child(2){animation-delay:.2s}.tcard:nth-child(3){animation-delay:.3s}.tcard:nth-child(4){animation-delay:.4s}
+@keyframes cf{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
+.tcard:hover{transform:translateY(-6px);box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.tcard .csvg{width:110px;height:130px;margin:0 auto 10px}
+.tcard .cn{font-size:1.1rem;font-weight:800}.tcard .cr{font-size:.78rem;color:rgba(255,255,255,.55);font-weight:600}
+.sl{font-size:.8rem;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:3px;margin-bottom:4px}
+.qt{font-size:clamp(1.05rem,2.6vw,1.4rem);font-weight:700;text-align:center;max-width:700px;line-height:1.5;margin-bottom:18px}
+.sc-box{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:20px 24px;margin-bottom:22px;max-width:700px;width:100%;line-height:1.6;font-size:clamp(.9rem,2vw,1.05rem);color:rgba(255,255,255,.85)}
+.sc-box strong{color:#4facfe}
+.cc{display:flex;flex-direction:column;align-items:center;width:100%;max-width:650px}
+.bc{display:block;width:100%;padding:16px 20px;margin:7px 0;background:rgba(255,255,255,.07);backdrop-filter:blur(10px);border:2px solid rgba(255,255,255,.12);border-radius:16px;color:#fff;font-size:.92rem;font-weight:600;text-align:left;cursor:pointer;transition:all .3s;font-family:'Nunito',sans-serif;line-height:1.4}
+.bc:hover{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.25);transform:translateX(5px)}
+.bc.ok{background:rgba(76,175,80,.25)!important;border-color:#4caf50!important}
+.bc.no{background:rgba(244,67,54,.25)!important;border-color:#f44336!important;animation:sk .5s ease}
+@keyframes sk{0%,100%{transform:translateX(0)}25%{transform:translateX(-10px)}75%{transform:translateX(10px)}}
+.kpi-bar{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin:16px 0 10px;width:100%;max-width:600px}
+.kpi{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:10px 18px;text-align:center;min-width:140px}
+.kpi .kl{font-size:.7rem;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:1px}
+.kpi .kv{font-size:1.1rem;font-weight:800}
+.kpi .kv.green{color:#81c784}.kv.red{color:#ef9a9a}.kv.yellow{color:#ffd740}
+.ra{display:none;flex-direction:column;align-items:center;width:100%;max-width:520px;margin-top:14px;animation:fu .5s ease forwards}
+.ra.active{display:flex}
+.rchar{width:190px;height:230px;margin-bottom:12px}
+.rtxt{font-size:clamp(.95rem,2.3vw,1.1rem);font-weight:700;text-align:center;max-width:480px;line-height:1.5;padding:0 10px}
+.rtxt.suc{color:#81c784}.rtxt.fal{color:#ef9a9a}
+.dots{display:flex;gap:8px;margin-bottom:14px}
+.dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.2);transition:all .3s}
+.dot.done{background:#4caf50;box-shadow:0 0 8px rgba(76,175,80,.5)}.dot.cur{background:#fff;box-shadow:0 0 12px rgba(255,255,255,.5);transform:scale(1.3)}.dot.fd{background:#f44336;box-shadow:0 0 8px rgba(244,67,54,.5)}
+.sb{position:fixed;top:16px;right:16px;z-index:50;display:none;align-items:center;gap:8px;background:rgba(255,255,255,.08);backdrop-filter:blur(20px);padding:8px 16px;border-radius:50px;border:1px solid rgba(255,255,255,.12);flex-wrap:wrap;justify-content:center}
+.sb .sv{font-size:.95rem;font-weight:800}.sb .sl2{font-size:.65rem;color:rgba(255,255,255,.5)}
+.pb{position:fixed;top:0;left:0;height:4px;background:linear-gradient(90deg,#667eea,#764ba2,#f093fb);background-size:200% 100%;animation:gs 3s ease infinite;transition:width .5s;z-index:60;border-radius:0 2px 2px 0}
+.cbox{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:200;overflow:hidden}
+.conf{position:absolute;top:-20px;animation:cfl var(--fd) linear forwards}
+@keyframes cfl{0%{transform:translateY(0) rotate(0);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+.fs{font-size:clamp(2.8rem,8vw,4.5rem);font-weight:900;background:linear-gradient(135deg,#f093fb,#f5576c,#4facfe);background-size:300% 300%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:gs 3s ease infinite}
+.fm{font-size:clamp(.95rem,2.3vw,1.2rem);color:rgba(255,255,255,.8);text-align:center;max-width:550px;line-height:1.6;margin:10px 0 20px}
+.legend-box{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:20px 24px;margin-bottom:22px;max-width:700px;width:100%;line-height:1.7;font-size:clamp(.85rem,1.8vw,.98rem);color:rgba(255,255,255,.85)}
+.legend-box strong{color:#4facfe}
+.legend-box .hl{color:#ffd740;font-weight:700}
+@media(max-width:600px){.team-grid{grid-template-columns:repeat(2,1fr);gap:10px}.tcard{padding:14px 8px}.tcard .csvg{width:85px;height:100px}.rchar{width:150px;height:180px}.sb{top:10px;right:10px;gap:6px;padding:6px 12px}}
+</style>
+</head>
+<body>
+<div class="gc">
+<div class="stars" id="stars"></div>
+<div class="pb" id="pb" style="width:0%"></div>
+<div class="sb" id="sb">
+<div style="display:flex;gap:6px;align-items:center">
+<span style="font-size:.75rem">Охват</span><span class="sv" id="kReach" style="color:#4facfe">0</span>
+<span style="color:rgba(255,255,255,.3)">|</span>
+<span style="font-size:.75rem">Качество</span><span class="sv" id="kQual" style="color:#81c784">100</span>
+<span style="color:rgba(255,255,255,.3)">|</span>
+<span style="font-size:.75rem">Ресурсы</span><span class="sv" id="kRes" style="color:#ffd740">2.0М</span>
+</div>
+</div>
+<div class="cbox" id="cbox"></div>
+
+<!-- Title -->
+<div class="scene active" id="sTitle">
+<svg viewBox="0 0 80 80" width="80" height="80" style="margin-bottom:16px"><circle cx="40" cy="40" r="38" fill="none" stroke="#4facfe" stroke-width="3"/><text x="40" y="52" text-anchor="middle" font-size="32" font-weight="900" fill="#fff" font-family="Nunito">ГТО</text></svg>
+<div class="title">ГТО для всех</div>
+<div class="sub">Проектный рывок — управляй физкультурно-спортивной организацией</div>
+<button class="btn btn-p" onclick="goTeam()">Начать игру 🚀</button>
+</div>
+
+<!-- Team -->
+<div class="scene" id="sTeam">
+<div class="title" style="font-size:clamp(1.4rem,4vw,2rem)">Команда проекта «Мобильный патруль»</div>
+<div class="sub">Познакомьтесь с теми, кто будет с вами работать</div>
+<div class="team-grid">
+<div class="tcard"><div class="csvg" id="c0"></div><div class="cn">Алексей</div><div class="cr">👨‍💼 Руководитель проекта</div></div>
+<div class="tcard"><div class="csvg" id="c1"></div><div class="cn">Марина</div><div class="cr">👩‍⚕️ Врач-методист</div></div>
+<div class="tcard"><div class="csvg" id="c2"></div><div class="cn">Денис</div><div class="cr">🏃 Координатор площадок</div></div>
+<div class="tcard"><div class="csvg" id="c3"></div><div class="cn">Ольга</div><div class="cr">📊 Бухгалтер-отчётчик</div></div>
+</div>
+<button class="btn btn-p" onclick="goScenario()">Начать работу 💪</button>
+</div>
+
+<!-- Scenario -->
+<div class="scene" id="sSc">
+<div class="dots" id="dots"></div>
+<div class="sl" id="sl"></div>
+<div class="qt" id="qt"></div>
+<div class="sc-box" id="scBox"></div>
+<div class="cc" id="cc"></div>
+<div class="ra" id="ra">
+<div class="rchar" id="rchar"></div>
+<div class="rtxt" id="rtxt"></div>
+<button class="btn btn-n" onclick="nextSc()">Далее ➜</button>
+</div>
+</div>
+
+<!-- Final -->
+<div class="scene" id="sFin">
+<div class="title" style="font-size:clamp(1.4rem,4vw,2rem)">Проект завершён!</div>
+<div class="fs" id="fScore">0/4</div>
+<div class="fm" id="fMsg"></div>
+<div class="kpi-bar" id="fKpi"></div>
+<div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;justify-content:center">
+<div class="csvg" id="fc0" style="width:75px;height:90px"></div>
+<div class="csvg" id="fc1" style="width:75px;height:90px"></div>
+<div class="csvg" id="fc2" style="width:75px;height:90px"></div>
+<div class="csvg" id="fc3" style="width:75px;height:90px"></div>
+</div>
+<button class="btn btn-p" onclick="restart()">Играть снова 🔄</button>
+</div>
+</div>
+
+<script>
+// === SVG CHARACTER ===
+function drawChar(name,hair,shirt,skin,expr,w,h){
+let eyes='',mouth='',extra='',hairS='',glasses='';
+const by=h*.58;
+if(expr==='happy'){
+eyes=`<ellipse cx="${w*.38}" cy="${h*.32}" rx="${w*.07}" ry="${h*.04}" fill="#1a1a2e"/>
+<ellipse cx="${w*.62}" cy="${h*.32}" rx="${w*.07}" ry="${h*.04}" fill="#1a1a2e"/>
+<ellipse cx="${w*.40}" cy="${h*.31}" rx="${w*.025}" ry="${h*.02}" fill="#fff"/>
+<ellipse cx="${w*.64}" cy="${h*.31}" rx="${w*.025}" ry="${h*.02}" fill="#fff"/>
+<path d="M${w*.28} ${h*.38} Q${w*.38} ${h*.34} ${w*.46} ${h*.38}" fill="none" stroke="#fff" stroke-width="${w*.018}" stroke-linecap="round" opacity=".5"/>
+<path d="M${w*.54} ${h*.38} Q${w*.62} ${h*.34} ${w*.72} ${h*.38}" fill="none" stroke="#fff" stroke-width="${w*.018}" stroke-linecap="round" opacity=".5"/>`;
+mouth=`<path d="M${w*.38} ${h*.46} Q${w*.5} ${h*.56} ${w*.62} ${h*.46}" fill="none" stroke="#1a1a2e" stroke-width="${w*.028}" stroke-linecap="round"/>`;
+extra=`<circle cx="${w*.28}" cy="${h*.44}" r="${w*.04}" fill="#ffb3b3" opacity=".5"/><circle cx="${w*.72}" cy="${h*.44}" r="${w*.04}" fill="#ffb3b3" opacity=".5"/>`;
+}else if(expr==='sad'){
+eyes=`<ellipse cx="${w*.38}" cy="${h*.34}" rx="${w*.07}" ry="${h*.045}" fill="#1a1a2e"/>
+<ellipse cx="${w*.62}" cy="${h*.34}" rx="${w*.07}" ry="${h*.045}" fill="#1a1a2e"/>
+<ellipse cx="${w*.40}" cy="${h*.33}" rx="${w*.02}" ry="${h*.015}" fill="#fff"/>
+<ellipse cx="${w*.64}" cy="${h*.33}" rx="${w*.02}" ry="${h*.015}" fill="#fff"/>
+<path d="M${w*.28} ${h*.30} Q${w*.38} ${h*.35} ${w*.46} ${h*.30}" fill="none" stroke="#fff" stroke-width="${w*.02}" stroke-linecap="round" opacity=".5"/>
+<path d="M${w*.54} ${h*.30} Q${w*.62} ${h*.35} ${w*.72} ${h*.30}" fill="none" stroke="#fff" stroke-width="${w*.02}" stroke-linecap="round" opacity=".5"/>
+<ellipse cx="${w*.38}" cy="${h*.42}" rx="${w*.025}" ry="${h*.018}" fill="#4facfe" opacity=".7"/>
+<ellipse cx="${w*.62}" cy="${h*.42}" rx="${w*.025}" ry="${h*.018}" fill="#4facfe" opacity=".7"/>`;
+mouth=`<path d="M${w*.40} ${h*.52} Q${w*.5} ${h*.44} ${w*.60} ${h*.52}" fill="none" stroke="#1a1a2e" stroke-width="${w*.028}" stroke-linecap="round"/>`;
+}else{
+eyes=`<ellipse cx="${w*.38}" cy="${h*.32}" rx="${w*.065}" ry="${h*.04}" fill="#1a1a2e"/>
+<ellipse cx="${w*.62}" cy="${h*.32}" rx="${w*.065}" ry="${h*.04}" fill="#1a1a2e"/>
+<ellipse cx="${w*.40}" cy="${h*.31}" rx="${w*.02}" ry="${h*.015}" fill="#fff"/>
+<ellipse cx="${w*.64}" cy="${h*.31}" rx="${w*.02}" ry="${h*.015}" fill="#fff"/>`;
+mouth=`<line x1="${w*.42}" y1="${h*.48}" x2="${w*.58}" y2="${h*.48}" stroke="#1a1a2e" stroke-width="${w*.028}" stroke-linecap="round"/>`;
+}
+// hair
+if(name==='Alexey'){hairS=`<ellipse cx="${w*.5}" cy="${h*.16}" rx="${w*.24}" ry="${h*.17}" fill="${hair}"/><rect x="${w*.26}" y="${h*.14}" width="${w*.07}" height="${h*.14}" rx="${w*.035}" fill="${hair}"/><rect x="${w*.67}" y="${h*.14}" width="${w*.07}" height="${h*.14}" rx="${w*.035}" fill="${hair}"/>`}
+else if(name==='Marina'){hairS=`<ellipse cx="${w*.5}" cy="${h*.16}" rx="${w*.25}" ry="${h*.18}" fill="${hair}"/><rect x="${w*.22}" y="${h*.15}" width="${w*.09}" height="${h*.36}" rx="${w*.045}" fill="${hair}" transform="rotate(-5 ${w*.265} ${h*.33})"/><rect x="${w*.69}" y="${h*.15}" width="${w*.09}" height="${h*.36}" rx="${w*.045}" fill="${hair}" transform="rotate(5 ${w*.735} ${h*.33})"/><ellipse cx="${w*.5}" cy="${h*.12}" rx="${w*.11}" ry="${h*.055}" fill="${hair}"/>`}
+else if(name==='Denis'){hairS=`<ellipse cx="${w*.5}" cy="${h*.17}" rx="${w*.24}" ry="${h*.15}" fill="${hair}"/><rect x="${w*.30}" y="${h*.08}" width="${w*.10}" height="${h*.10}" rx="${w*.03}" fill="${hair}" transform="rotate(-10 ${w*.35} ${h*.13})"/><rect x="${w*.45}" y="${h*.06}" width="${w*.10}" height="${h*.12}" rx="${w*.03}" fill="${hair}" transform="rotate(5 ${w*.5} ${h*.12})"/><rect x="${w*.58}" y="${h*.08}" width="${w*.10}" height="${h*.09}" rx="${w*.03}" fill="${hair}" transform="rotate(15 ${w*.63} ${h*.13})"/>`}
+else{hairS=`<ellipse cx="${w*.5}" cy="${h*.16}" rx="${w*.25}" ry="${h*.17}" fill="${hair}"/><rect x="${w*.22}" y="${h*.15}" width="${w*.09}" height="${h*.34}" rx="${w*.045}" fill="${hair}" transform="rotate(-5 ${w*.265} ${h*.32})"/><rect x="${w*.69}" y="${h*.15}" width="${w*.09}" height="${h*.34}" rx="${w*.045}" fill="${hair}" transform="rotate(5 ${w*.735} ${h*.32})"/>`}
+// headband for Marina
+if(name==='Marina') extra+=`<ellipse cx="${w*.5}" cy="${h*.21}" rx="${w*.20}" ry="${h*.035}" fill="#f093fb" opacity=".8"/>`;
+// glasses for Olga
+if(name==='Olga'){glasses=`<rect x="${w*.26}" y="${h*.27}" width="${w*.18}" height="${h*.10}" rx="${w*.04}" fill="none" stroke="#555" stroke-width="${w*.02}"/><rect x="${w*.56}" y="${h*.27}" width="${w*.18}" height="${h*.10}" rx="${w*.04}" fill="none" stroke="#555" stroke-width="${w*.02}"/><line x1="${w*.44}" y1="${h*.32}" x2="${w*.56}" y2="${h*.32}" stroke="#555" stroke-width="${w*.018}"/>`}
+// whistle for Denis
+if(name==='Denis'&&expr==='happy') extra+=`<ellipse cx="${w*.72}" cy="${h*.42}" rx="${w*.03}" ry="${h*.02}" fill="#ffd740"/><line x1="${w*.72}" y1="${h*.44}" x2="${w*.78}" y2="${h*.52}" stroke="#ffd740" stroke-width="${w*.015}" stroke-linecap="round"/>`;
+return `<svg viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}">
+<rect x="${w*.28}" y="${by}" width="${w*.44}" height="${h*.40}" rx="${w*.10}" fill="${shirt}"/>
+<rect x="${w*.43}" y="${h*.44}" width="${w*.14}" height="${h*.10}" rx="${w*.04}" fill="${skin}"/>
+<ellipse cx="${w*.5}" cy="${h*.30}" rx="${w*.22}" ry="${h*.22}" fill="${skin}"/>
+${hairS}${eyes}${mouth}${extra}${glasses}</svg>`;
+}
+
+// === DATA ===
+const rounds=[
+{label:'Раунд 1 из 4',title:'Кадры: пенсионеры-волонтёры или фитнес-тренеры?',
+scenario:`<strong>Ситуация:</strong> Вам нужны инструкторы для проведения утренней зарядки в парках. Есть две группы: <span class="hl">20 активных пенсионеров-волонтёров</span> (бесплатно, но без медосмотра) и <span class="hl">5 дипломированных тренеров</span> (дорого — 300 тыс. руб. на 3 месяца).`,
+choices:[
+{text:'1️⃣ Взять пенсионеров, сэкономить бюджет. Оформить как волонтёров без медосмотра.',ok:false,
+react:'На второй неделе у пенсионера гипертонический криз во время зарядки. Прокурорская проверка. Качество −50%, проект под угрозой.',char:'Marina'},
+{text:'2️⃣ Взять 2 тренеров + 10 пенсионеров под их присмотром (оплатить медосмотр — 60 тыс. руб.)',ok:true,
+react:'Пенсионеры чувствуют заботу. Тренеры обучают технике безопасности. Охват +20%, Качество +10%! Команда довольна.',char:'Alexey'},
+{text:'3️⃣ Отказаться от зарядки, перевести в онлайн-формат (снять видео за 50 тыс. руб.)',ok:false,
+react:'Жители 60+ не смотрят онлайн. Целевая аудитория потеряна. Охват −30%, спонсор недоволен.',char:'Denis'}
+]},
+{label:'Раунд 2 из 4',title:'Площадка: школьный стадион или промышленная зона?',
+scenario:`<strong>Ситуация:</strong> Администрация предлагает бесплатно использовать заброшенный стадион завода, но требуется ремонт беговых дорожек (<span class="hl">500 тыс. руб.</span>). Альтернатива — аренда школьного стадиона (<span class="hl">200 тыс. руб.</span> за 4 месяца, но приоритет — ученики).`,
+choices:[
+{text:'1️⃣ Взять заводской стадион, сделать ремонт. Привлечь заводчан через профсоюз.',ok:false,
+react:'Бюджет −500 тыс., появились 300 семей. Но через месяц — асбестовая крошка на дорожках! Роспотребнадзор требует демонтажа. Штраф.',char:'Denis'},
+{text:'2️⃣ Взять школьный стадион. Сосредоточиться на детях и учителях.',ok:false,
+react:'Бюджет −200 тыс., Охват +15% (только дети). Но KPI по взрослому населению не выполнен! Проект признан «неэффективным».',char:'Olga'},
+{text:'3️⃣ Настаивать на ремонте обоих стадионов, просить спонсора добавить 400 тыс. (за рекламу энергетиков).',ok:false,
+react:'Реклама энергетиков возмущает родителей. Соцсети горят! Качество −40%. Зато ресурсы +400 тыс. и два стадиона.',char:'Marina'}
+]},
+{label:'Раунд 3 из 4',title:'Событие: семейный фестиваль ГТО',
+scenario:`<strong>Ситуация:</strong> На финальный фестиваль пришли 500 человек. Внезапно моросит дождь, скользко. Организаторы предлагают три варианта действий.`,
+choices:[
+{text:'1️⃣ Провести все испытания, несмотря на погоду (риск травм).',ok:false,
+react:'Три падения, один перелом. Суд. Качество −80%, увольнение руководителя.',char:'Marina'},
+{text:'2️⃣ Свернуть программу, раздать сувениры и чай. Провести фестиваль через неделю.',ok:true,
+react:'Люди благодарят за заботу! Явка через неделю — 50%. Повторные расходы, но безопасность превыше всего. Верное решение!',char:'Alexey'},
+{text:'3️⃣ Провести викторину в помещении, нормативы перенести на онлайн-трек.',ok:false,
+react:'Пенсионеры не справляются с приложением. Скандал «цифровое неравенство». Молодёжь +30%, старшее поколение −45%.',char:'Denis'}
+]},
+{label:'Раунд 4 из 4',title:'Отчётность: завысили или нет?',
+scenario:`<strong>Ситуация:</strong> Проект сдан. Охват по факту — <span class="hl">1200</span> уникальных участников (план 1500). Ваш заместитель предлагает добавить в отчёт 300 детей, смотревших онлайн-трансляцию (30 секунд), чтобы получить премию.`,
+choices:[
+{text:'1️⃣ Согласиться. Все так делают.',ok:false,
+react:'В следующем квартале проверка КРУ. Вскрывается подлог. Дисквалификация.',char:'Olga'},
+{text:'2️⃣ Отказаться. Написать реальные цифры и объяснить причины.',ok:true,
+react:'Премии нет, но доверие учредителя сохранено! Вам дают новый проект на больший бюджет. Долгосрочное доверие важнее разовой премии!',char:'Alexey'},
+{text:'3️⃣ Написать 1500, но добавить «с учётом мультипликативного эффекта».',ok:false,
+react:'Формально манипуляция. Методист принимает, но опытные коллеги понимают. Репутация среди профессионалов падает.',char:'Olga'}
+]}
+];
+
+const chars=[
+{name:'Alexey',hair:'#5D4037',shirt:'#667eea',skin:'#fdd'},
+{name:'Marina',hair:'#8B4513',shirt:'#e91e63',skin:'#fdb'},
+{name:'Denis',hair:'#333',shirt:'#ff9800',skin:'#fdb'},
+{name:'Olga',hair:'#5D4037',shirt:'#38ef7d',skin:'#fdd'}
+];
+
+// === STATE ===
+let cur=0,sc=0,res=[],reach=0,qual=100,resM=2.0,locked=false;
+
+// === STARS ===
+function mkStars(){
+const c=document.getElementById('stars');c.innerHTML='';
+for(let i=0;i<120;i++){const s=document.createElement('div');s.className='star';
+s.style.left=Math.random()*100+'%';s.style.top=Math.random()*100+'%';
+s.style.setProperty('--d',(2+Math.random()*3)+'s');s.style.animationDelay=Math.random()*3+'s';
+const sz=1+Math.random()*3;s.style.width=s.style.height=sz+'px';c.appendChild(s)}
+}
+
+// === CONFETTI ===
+function confetti(){
+const c=document.getElementById('cbox');c.innerHTML='';
+const cols=['#f093fb','#f5576c','#4facfe','#00f2fe','#ffd700','#ff6b6b','#48dbfb','#ff9ff3'];
+for(let i=0;i<70;i++){const p=document.createElement('div');p.className='conf';
+p.style.left=Math.random()*100+'%';p.style.width=(5+Math.random()*10)+'px';
+p.style.height=(5+Math.random()*10)+'px';p.style.background=cols[Math.floor(Math.random()*cols.length)];
+p.style.borderRadius=Math.random()>.5?'50%':'2px';p.style.setProperty('--fd',(2+Math.random()*3)+'s');
+p.style.animationDelay=Math.random()*1.5+'s';c.appendChild(p)}
+setTimeout(()=>c.innerHTML='',5500);
+}
+
+// === SCENE ===
+function show(id){document.querySelectorAll('.scene').forEach(s=>s.classList.remove('active'));
+const el=document.getElementById(id);el.classList.add('active');el.style.animation='none';el.offsetHeight;el.style.animation='fu .6s ease forwards'}
+
+// === TEAM ===
+function renderTeam(){chars.forEach((ch,i)=>{document.getElementById('c'+i).innerHTML=drawChar(ch.name,ch.hair,ch.shirt,ch.skin,'neutral',110,130)})}
+
+// === NAV ===
+function goTeam(){show('sTeam');renderTeam()}
+function goScenario(){cur=0;sc=0;reach=0;qual=100;resM=2.0;res=[];
+document.getElementById('sb').style.display='flex';updKPI();show('sSc');renderRound(0)}
+
+// === RENDER ROUND ===
+function renderRound(idx){
+if(idx>=rounds.length){showFinal();return}
+locked=false;const r=rounds[idx];
+document.getElementById('sl').textContent=r.label;
+document.getElementById('qt').textContent=r.title;
+document.getElementById('scBox').innerHTML=r.scenario;
+document.getElementById('ra').classList.remove('active');
+// dots
+const d=document.getElementById('dots');d.innerHTML='';
+for(let i=0;i<rounds.length;i++){const dd=document.createElement('div');dd.className='dot';
+if(i<idx)dd.classList.add(res[i]?'done':'fd');else if(i===idx)dd.classList.add('cur');d.appendChild(dd)}
+// choices
+const c=document.getElementById('cc');c.innerHTML='';
+r.choices.forEach((ch,i)=>{const b=document.createElement('button');b.className='bc';b.textContent=ch.text;
+b.style.opacity='0';b.style.animation=`fu .5s ease ${i*.12}s forwards`;
+b.onclick=()=>pick(idx,i,b);c.appendChild(b)});
+document.getElementById('pb').style.width=(idx/rounds.length*100)+'%'}
+
+// === PICK ===
+function pick(idx,ci,btn){
+if(locked)return;locked=true;const r=rounds[idx],ch=r.choices[ci];
+document.querySelectorAll('.bc').forEach(b=>b.style.pointerEvents='none');
+if(ch.ok){btn.classList.add('ok');sc++;updKPIforRound(idx,true)}
+else{btn.classList.add('no');document.querySelectorAll('.bc').forEach((b,j)=>{if(r.choices[j].ok)b.classList.add('ok')});
+updKPIforRound(idx,false)}
+res.push(ch.ok);updKPI();setTimeout(()=>showReact(idx,ch),700)}
+
+function updKPIforRound(idx,ok){
+if(ok){reach+=idx===0?300:idx===1?200:idx===2?150:200;qual=idx===0?110:idx===1?100:idx===2?105:100;
+resM=idx===0?1.94:idx===1?1.6:idx===2?1.4:1.4}
+else{
+if(idx===0){qual=50;reach=100;resM=2.0}
+else if(idx===1){reach=idx===1?-150:0;qual=60;resM=idx===1?1.1:1.6}
+else if(idx===2){reach=idx===2?-200:-100;qual=idx===2?20:60;resM=1.4}
+else{qual=10;reach=1200;resM=1.4}
+}}
+function updKPI(){document.getElementById('kReach').textContent=reach;
+document.getElementById('kQual').textContent=qual;
+document.getElementById('kRes').textContent=resM.toFixed(1)+'М'}
+
+// === REACT ===
+function showReact(idx,ch){
+const area=document.getElementById('ra');const cd=document.getElementById('rchar');const tx=document.getElementById('rtxt');
+const r=rounds[idx];
+const hairC={Alexey:'#5D4037',Marina:'#8B4513',Denis:'#333',Olga:'#5D4037'};
+const shirtC={Alexey:'#667eea',Marina:'#e91e63',Denis:'#ff9800',Olga:'#38ef7d'};
+const skinC={Alexey:'#fdd',Marina:'#fdb',Denis:'#fdb',Olga:'#fdd'};
+const chName=ch.char;const expr=ch.ok?'happy':'sad';
+cd.innerHTML=drawChar(chName,hairC[chName],shirtC[chName],skinC[chName],expr,190,230);
+tx.className='rtxt '+(ch.ok?'suc':'fal');
+tx.textContent=(ch.ok?'✅ ':'😢 ')+ch.react;
+area.classList.add('active');
+if(ch.ok)confetti()}
+
+function nextSc(){cur++;renderRound(cur)}
+
+// === FINAL ===
+function showFinal(){
+document.getElementById('pb').style.width='100%';show('sFin');
+document.getElementById('fScore').textContent=sc+'/'+rounds.length;
+let m='';
+if(sc===4)m='🏆 Превосходно! Вы — идеальный руководитель физкультурно-спортивной организации! Социальная ответственность, безопасность и долгосрочное доверие — ваш подход.';
+else if(sc===3)m='👍 Отличная работа! Большинство решений были правильными. Команда ценит ваш профессиональный подход.';
+else if(sc===2)m='🤔 Непростой путь. Некоторые решения были спорными. Но вы научились балансировать между рисками и ресурсами.';
+else if(sc===1)m='😅 Трудная дорога. Большинство решений оказались неверными. Команда прошла через трудности, но это ценный урок.';
+else m='😢 Большинство решений неверные. Безопасность и доверие — основа управления ФСО. Попробуйте ещё раз!';
+document.getElementById('fMsg').textContent=m;
+// final KPI
+document.getElementById('fKpi').innerHTML=`<div class="kpi"><div class="kl">Охват</div><div class="kv" style="color:#4facfe">${reach}</div></div>
+<div class="kpi"><div class="kl">Качество</div><div class="kv ${qual>=80?'green':qual>=50?'yellow':'red'}">${qual}%</div></div>
+<div class="kpi"><div class="kl">Ресурсы</div><div class="kv" style="color:#ffd740">${resM.toFixed(1)}М ₽</div></div>`;
+// final chars
+const expr=sc>=2?'happy':'sad';
+chars.forEach((ch,i)=>{document.getElementById('fc'+i).innerHTML=drawChar(ch.name,ch.hair,ch.shirt,ch.skin,expr,75,90)});
+if(sc>=3)setTimeout(confetti,400)}
+
+function restart(){cur=0;sc=0;reach=0;qual=100;resM=2.0;res=[];
+document.getElementById('kReach').textContent='0';document.getElementById('kQual').textContent='100';
+document.getElementById('kRes').textContent='2.0М';document.getElementById('cbox').innerHTML='';
+show('sTitle')}
+
+mkStars();
+</script>
+</body>
+</html>
+
